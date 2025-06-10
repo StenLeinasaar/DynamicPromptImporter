@@ -43,3 +43,9 @@ def test_prompt_fetching():
     importer = DynamicPromptImporter("owner/repo", preload=True)
     text = importer.folder.example
     assert text == "Test prompt"
+
+
+def test_get_file_content():
+    importer = DynamicPromptImporter("owner/repo", preload=True)
+    text = importer.get_file_content("folder/example")
+    assert text == "Test prompt"
