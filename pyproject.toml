@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dynamic-prompt-importer"
+version = "0.1.0"
+description = "Treat a GitHub repo of Markdown prompts as a Python object."
+authors = [{ name = "Your Name", email = "you@example.com" }]
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["requests>=2.31"]
+
+[project.urls]
+Homepage   = "https://github.com/your-org/dynamic_prompt_importer"
+Source     = "https://github.com/your-org/dynamic_prompt_importer"
+Issues     = "https://github.com/your-org/dynamic_prompt_importer/issues"
