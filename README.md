@@ -30,6 +30,29 @@ importer = DynamicPromptImporter(
 print(importer.folder.welcome)  # prints contents of folder/welcome.md
 ```
 
+### Creating a GitHub token for private repositories
+
+You only need a personal access token when accessing a private repository. The
+recommended approach is to create a *fine-grained* token with read-only access
+to the specific repo that stores your prompts.
+
+1. Verify your GitHub email address if you have not done so already.
+2. Click your profile picture in the upper-right corner of GitHub and choose
+   **Settings**.
+3. In the left sidebar select **Developer settings**.
+4. Under **Personal access tokens** click **Fine-grained tokens** and then
+   **Generate new token**.
+5. Give the token a name and expiration and optionally add a description.
+6. Choose the resource owner and repository that the token should access, then
+   select the minimal permissions required (read-only is sufficient here).
+7. Click **Generate token** and copy the resulting value.
+
+Note that GitHub limits each account to 50 fine-grained tokens. For larger
+automation needs consider creating a GitHub App instead.
+
+Use this token for the ``token`` parameter when instantiating
+``DynamicPromptImporter``.
+
 You may also fetch a file explicitly using `get_file_content()`:
 
 ```python
