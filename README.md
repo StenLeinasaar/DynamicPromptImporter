@@ -44,7 +44,7 @@ to the specific repo that stores your prompts.
    **Generate new token**.
 5. Give the token a name and expiration and optionally add a description.
 6. Choose the resource owner and repository that the token should access, then
-   select the minimal permissions required (read-only is sufficient here).
+   select the minimal permissions required (read-only is sufficient here). **Readonly for the content is enough**
 7. Click **Generate token** and copy the resulting value.
 
 Note that GitHub limits each account to 50 fine-grained tokens. For larger
