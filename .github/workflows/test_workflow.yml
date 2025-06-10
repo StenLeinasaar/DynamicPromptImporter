@@ -1,10 +1,11 @@
 name: Publish to Test PyPI
 
+# Trigger on pushes to main (or adjust to tags/releases as you prefer)
 on:
   push:
-    tags:
-      - 'v*.*.*'
-
+    branches:
+      - main
+      
 jobs:
   build-and-publish:
     environment: testpypi
