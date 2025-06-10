@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "dynamic-prompt-importer"
-version = "0.1.0"
+version = "0.1.1"
 description = "Treat a GitHub repo of Markdown prompts as a Python object."
 authors = [{ name = "Sten Leinasaar", email = "stenleinasaar@proton.me" }]
 readme = "README.md"
