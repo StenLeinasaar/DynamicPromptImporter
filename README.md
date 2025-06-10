@@ -50,7 +50,9 @@ Maintaining prompts in a separate repository keeps them version controlled and e
 ## Running Tests
 
 ```bash
-pytest
+pytest -vv -s
 ```
 
-The tests use mocked HTTP responses so no network access is required.
+The tests use mocked HTTP responses so no network access is required. A JSON
+summary will be written to `test_report.json` after the run.  See
+`tests/README.md` for more details on what each test covers.

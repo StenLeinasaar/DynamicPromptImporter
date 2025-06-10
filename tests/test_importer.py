@@ -48,24 +48,32 @@ from dynamic_prompt_importer import DynamicPromptImporter
 
 
 def test_prompt_fetching():
+    """Fetching a prompt via attribute access returns its contents."""
+    print("[info] test_prompt_fetching - fetching 'folder/example.md'")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     text = importer.folder.example
     assert text == "Test prompt"
 
 
 def test_get_file_content():
+    """get_file_content should retrieve a file explicitly."""
+    print("[info] test_get_file_content - explicit file fetch")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     text = importer.get_file_content("folder/example")
     assert text == "Test prompt"
 
 
 def test_attribute_sanitization():
+    """Attributes with unsafe characters are sanitized."""
+    print("[info] test_attribute_sanitization - attribute name sanitization")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     text = importer.another_file
     assert text == "Another prompt"
 
 
 def test_dir_listing_and_reload():
+    """dir() should list children and reload() clears caches."""
+    print("[info] test_dir_listing_and_reload - dir listing and reload")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     _ = importer.folder.example  # prime cache
     assert "folder" in dir(importer)
@@ -76,18 +84,24 @@ def test_dir_listing_and_reload():
 
 
 def test_missing_attribute():
+    """Accessing a missing attribute should raise AttributeError."""
+    print("[info] test_missing_attribute - expect AttributeError")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     with pytest.raises(AttributeError):
         _ = importer.no_such_file
 
 
 def test_get_file_content_missing():
+    """get_file_content should raise when the file does not exist."""
+    print("[info] test_get_file_content_missing - expect FileNotFoundError")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     with pytest.raises(FileNotFoundError):
         importer.get_file_content("folder/not_there")
 
 
 def test_bad_blob_encoding():
+    """Unexpected blob encoding should raise a RuntimeError."""
+    print("[info] test_bad_blob_encoding - expect RuntimeError for encoding")
     importer = DynamicPromptImporter("owner/repo", preload=True)
     with pytest.raises(RuntimeError):
         importer.get_file_content("bad-encoding")
