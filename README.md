@@ -1,78 +1,56 @@
 # Dynamic Prompt Importer
 
-This repository exposes a `DynamicPromptImporter` class which lets you treat a
-GitHub repository full of Markdown prompts as a Python object. Each Markdown
-file becomes an attribute that returns the file contents.
+Dynamic Prompt Importer turns a GitHub repository full of Markdown files into a Python object.  Each prompt can be accessed as an attribute which lazily downloads the file on first use.  The package was born out of laziness—I wanted a quick way to pull prompts from my private prompt repo without manually copying files around.
 
 ## Installation
 
-Install the package from PyPI:
+Install from PyPI:
 
 ```bash
 pip install dynamic-prompt-importer
 ```
 
-Or install the current repository for development:
+For development install the repo directly:
 
 ```bash
 pip install -e .
 ```
 
-## Usage example
+## Usage
 
-1. **Install the package** (and dependencies):
+```python
+from dynamic_prompt_importer import DynamicPromptImporter
 
-   ```bash
-   pip install dynamic-prompt-importer
-   ```
+importer = DynamicPromptImporter(
+    "owner/my-prompt-repo",  # GitHub "owner/repo" spec
+    token="ghp_yourGitHubToken",  # needed for private repos
+    preload=True,  # fetch the repo tree immediately
+)
 
-2. **Instantiate** the importer using your repository and token. Replace the repo
-   name and token below with your own values.
+print(importer.folder.welcome)  # prints contents of folder/welcome.md
+```
 
-   ```python
-   from dynamic_prompt_importer import DynamicPromptImporter
+You may also fetch a file explicitly using `get_file_content()`:
 
-   importer = DynamicPromptImporter(
-       "owner/repo-with-prompts",
-       token="ghp_yourGitHubToken",
-       preload=True,
-   )
-   ```
+```python
+text = importer.get_file_content("folder/welcome")
+```
 
-3. **Access a prompt** by navigating through attributes that mirror the folder
-   structure of the repository. For example, if the repo contains a file
-   `greetings/welcome.md`, you can print it with:
+## API
 
-   ```python
-   print(importer.greetings.welcome)
-   ```
+* `DynamicPromptImporter(repo, token=None, branch="main", preload=False)` - create an importer for a GitHub repo.
+* Attribute access mirrors the repository structure: `importer.docs.setup` returns the text of `docs/setup.md`.
+* `get_file_content(path)` - retrieve a file via an explicit path.
+* `reload()` - clear caches and re-fetch the repository tree.
 
-   You should see the Markdown contents of `greetings/welcome.md` printed to the
-   console.
+## Why?
 
-4. **Fetch a file by path** using the ``get_file_content`` helper when you
-   prefer to specify a file path directly:
+Maintaining prompts in a separate repository keeps them version controlled and editable without redeploying application code.  This utility lets you pull those prompts into Python on demand so that your code always uses the latest version.
 
-   ```python
-   text = importer.get_file_content("greetings/welcome")
-   ```
+## Running Tests
 
-## API overview
+```bash
+pytest
+```
 
-- `DynamicPromptImporter(repo, token=None, branch="main", preload=False)`
-  creates an importer for the given GitHub repository.
-- Attribute access mirrors the repository structure. For instance
-  `importer.docs.setup` returns the contents of `docs/setup.md`.
-- `get_file_content(path)` fetches a Markdown file by path when attribute access
-  is inconvenient.
-- `reload()` clears caches and fetches a fresh copy of the repository.
-
-
-5. **Run the tests** to ensure everything is wired correctly:
-
-   ```bash
-   pytest
-   ```
-
-   The included unit test uses mocked HTTP responses to simulate GitHub and
-   verifies that a prompt can be retrieved successfully.
+The tests use mocked HTTP responses so no network access is required.
