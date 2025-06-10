@@ -26,6 +26,7 @@ def fake_get(url, *args, **kwargs):
             "tree": [
                 {"path": "folder/example.md", "type": "blob", "sha": "sha-blob"},
                 {"path": "another-file.md", "type": "blob", "sha": "sha-blob2"},
+                {"path": "bad-encoding.md", "type": "blob", "sha": "sha-bad"},
             ]
         }
     elif url.endswith("/git/blobs/sha-blob"):
@@ -34,6 +35,8 @@ def fake_get(url, *args, **kwargs):
     elif url.endswith("/git/blobs/sha-blob2"):
         content = base64.b64encode(b"Another prompt").decode()
         response.json.return_value = {"encoding": "base64", "content": content}
+    elif url.endswith("/git/blobs/sha-bad"):
+        response.json.return_value = {"encoding": "utf-8", "content": "oops"}
     else:
         raise AssertionError(f"Unexpected URL: {url}")
     return response
@@ -70,3 +73,21 @@ def test_dir_listing_and_reload():
     assert importer._file_cache
     importer.reload()
     assert not importer._file_cache
+
+
+def test_missing_attribute():
+    importer = DynamicPromptImporter("owner/repo", preload=True)
+    with pytest.raises(AttributeError):
+        _ = importer.no_such_file
+
+
+def test_get_file_content_missing():
+    importer = DynamicPromptImporter("owner/repo", preload=True)
+    with pytest.raises(FileNotFoundError):
+        importer.get_file_content("folder/not_there")
+
+
+def test_bad_blob_encoding():
+    importer = DynamicPromptImporter("owner/repo", preload=True)
+    with pytest.raises(RuntimeError):
+        importer.get_file_content("bad-encoding")
