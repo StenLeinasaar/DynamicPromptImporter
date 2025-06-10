@@ -98,6 +98,31 @@ class DynamicPromptImporter:
         self._file_cache.clear()
         _ = self._get_tree()
 
+    def get_file_content(self, path: str) -> str:
+        """Return the contents of *path* from the repository.
+
+        Parameters
+        ----------
+        path : str
+            Repository-relative POSIX path to a Markdown file. The ``.md``
+            extension may be omitted.
+
+        Returns
+        -------
+        str
+            The file contents as text.
+        """
+
+        path = path.lstrip("/").replace("\\", "/")
+        if not path.endswith(".md"):
+            path = f"{path}.md"
+
+        for entry in self._get_tree():
+            if entry.path == path:
+                return self._get_file_text(entry.path)
+
+        raise FileNotFoundError(path)
+
     # ---------------------------------------------------------------------
     # Dunder methods to expose folders/files as attributes
     # ---------------------------------------------------------------------

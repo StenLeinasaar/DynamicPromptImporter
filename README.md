@@ -36,7 +36,14 @@ file becomes an attribute that returns the file contents.
    You should see the Markdown contents of `greetings/welcome.md` printed to the
    console.
 
-4. **Run the tests** to ensure everything is wired correctly:
+4. **Fetch a file by path** using the ``get_file_content`` helper when you
+   prefer to specify a file path directly:
+
+   ```python
+   text = importer.get_file_content("greetings/welcome")
+   ```
+
+5. **Run the tests** to ensure everything is wired correctly:
 
    ```bash
    pytest
